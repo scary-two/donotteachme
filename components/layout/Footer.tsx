@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm md:flex-row md:items-center md:justify-between">
         <p>© {new Date().getFullYear()}</p>
         <p className="text-gray-500">
-          <a href="aayush.shrestha.com.np">Aayush S.</a>
+          <a href="https://aayushshrestha.info.np" target="_blank" rel="noopener noreferrer">Aayush S.</a>
         </p>
       </div>
     </footer>
