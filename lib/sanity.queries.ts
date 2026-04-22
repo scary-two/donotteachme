@@ -21,17 +21,49 @@ export type PortableTextSpan = {
   _key: string;
   _type: "span";
   text: string;
+  marks?: string[];
 };
 
-export type PortableTextBlock = {
+export type PortableTextBlockNode = {
   _key: string;
   _type: "block";
   style?: string;
   children?: PortableTextSpan[];
+  listItem?: "bullet" | "number";
+  level?: number;
+  markDefs?: Array<Record<string, unknown>>;
 };
 
+export type PortableTextImageNode = {
+  _key: string;
+  _type: "image";
+  alt?: string;
+  asset?: {
+    url?: string;
+    metadata?: {
+      dimensions?: {
+        width?: number;
+        height?: number;
+        aspectRatio?: number;
+      };
+    };
+  };
+};
+
+export type PortableTextCodeBlockNode = {
+  _key: string;
+  _type: "codeBlock";
+  language?: string;
+  code?: string;
+};
+
+export type PortableTextNode =
+  | PortableTextBlockNode
+  | PortableTextImageNode
+  | PortableTextCodeBlockNode;
+
 export type SanityPost = SanityPostListItem & {
-  body: PortableTextBlock[];
+  body: PortableTextNode[];
 };
 
 const postListProjection = `
@@ -69,7 +101,18 @@ export const postsByCategoryQuery = groq`
 export const singlePostQuery = groq`
   *[_type == "post" && slug.current == $slug][0]{
     ${postListProjection},
-    body,
+    body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->{
+          url,
+          metadata {
+            dimensions
+          }
+        }
+      }
+    },
   }
 `;
 

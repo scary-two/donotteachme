@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import PortableTextRenderer from "@/components/blog/PortableTextRenderer";
 import { urlFor } from "@/lib/sanity.image";
-import type { PortableTextBlock, SanityPost } from "@/lib/sanity.queries";
+import type { SanityPost } from "@/lib/sanity.queries";
 
 type BlogPostTemplateProps = {
   post: SanityPost;
@@ -13,51 +14,6 @@ function formatPublishedDate(dateString: string) {
     month: "long",
     year: "numeric",
   });
-}
-
-function getBlockText(block: PortableTextBlock) {
-  return block.children?.map((child) => child.text).join("") ?? "";
-}
-
-function renderBlock(block: PortableTextBlock) {
-  const text = getBlockText(block);
-
-  if (!text.trim()) {
-    return null;
-  }
-
-  if (block.style === "h2") {
-    return (
-      <h2 key={block._key} className="mt-10 text-2xl font-semibold text-white">
-        {text}
-      </h2>
-    );
-  }
-
-  if (block.style === "h3") {
-    return (
-      <h3 key={block._key} className="mt-8 text-xl font-semibold text-white">
-        {text}
-      </h3>
-    );
-  }
-
-  if (block.style === "blockquote") {
-    return (
-      <blockquote
-        key={block._key}
-        className="mb-6 border-l-2 border-green-400 pl-4 text-lg italic text-gray-300"
-      >
-        {text}
-      </blockquote>
-    );
-  }
-
-  return (
-    <p key={block._key} className="mb-6 text-base leading-8 text-gray-300">
-      {text}
-    </p>
-  );
 }
 
 export default function BlogPostTemplate({ post }: BlogPostTemplateProps) {
@@ -96,7 +52,7 @@ export default function BlogPostTemplate({ post }: BlogPostTemplateProps) {
         ) : null}
 
         <div className="mt-10">
-          {post.body.map((block) => renderBlock(block))}
+          <PortableTextRenderer value={post.body} />
         </div>
       </article>
     </main>
