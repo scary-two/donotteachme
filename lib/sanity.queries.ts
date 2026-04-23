@@ -24,6 +24,12 @@ export type PortableTextSpan = {
   marks?: string[];
 };
 
+export type PortableTextLinkMark = {
+  _key: string;
+  _type: "link";
+  href?: string;
+};
+
 export type PortableTextBlockNode = {
   _key: string;
   _type: "block";
@@ -31,7 +37,7 @@ export type PortableTextBlockNode = {
   children?: PortableTextSpan[];
   listItem?: "bullet" | "number";
   level?: number;
-  markDefs?: Array<Record<string, unknown>>;
+  markDefs?: PortableTextLinkMark[];
 };
 
 export type PortableTextImageNode = {

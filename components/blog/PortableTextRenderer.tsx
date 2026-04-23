@@ -17,6 +17,10 @@ type CodeBlockProps = {
   block: PortableTextCodeBlockNode;
 };
 
+type LinkMarkValue = {
+  href?: string;
+};
+
 function formatLanguageLabel(language?: string) {
   if (!language) {
     return "Plain text";
@@ -120,6 +124,27 @@ const components: PortableTextComponents = {
   listItem: {
     bullet: ({children}) => <li>{children}</li>,
     number: ({children}) => <li>{children}</li>,
+  },
+  marks: {
+    link: ({children, value}) => {
+      const link = value as LinkMarkValue;
+      const href = link?.href;
+
+      if (!href) {
+        return <>{children}</>;
+      }
+
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-blue-400 transition hover:text-blue-300 hover:underline hover:underline-offset-4"
+        >
+          {children}
+        </a>
+      );
+    },
   },
   types: {
     image: ({value}) => {
