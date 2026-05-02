@@ -1,8 +1,8 @@
- "use client";
+"use client";
 
-import Image from "next/image";
 import {useState} from "react";
 import {PortableText, type PortableTextComponents} from "@portabletext/react";
+import BodyImageWithLightbox from "@/components/blog/BodyImageWithLightbox";
 import type {
   PortableTextCodeBlockNode,
   PortableTextImageNode,
@@ -149,30 +149,11 @@ const components: PortableTextComponents = {
   types: {
     image: ({value}) => {
       const image = value as PortableTextImageNode;
-      const imageUrl = image?.asset?.url;
-      const width = image?.asset?.metadata?.dimensions?.width ?? 1200;
-      const height = image?.asset?.metadata?.dimensions?.height ?? 675;
-
-      if (!imageUrl) {
+      if (!image?.asset) {
         return null;
       }
 
-      return (
-        <figure className="my-10 overflow-hidden rounded-2xl border border-gray-800 bg-gray-950/40">
-          <Image
-            src={imageUrl}
-            alt={image.alt ?? ""}
-            width={width}
-            height={height}
-            className="h-auto w-full object-cover"
-          />
-          {image.alt ? (
-            <figcaption className="border-t border-gray-800 px-4 py-3 text-sm text-gray-400">
-              {image.alt}
-            </figcaption>
-          ) : null}
-        </figure>
-      );
+      return <BodyImageWithLightbox image={image} />;
     },
     codeBlock: ({value}) => {
       const block = value as PortableTextCodeBlockNode;
