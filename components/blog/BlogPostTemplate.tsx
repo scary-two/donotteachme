@@ -18,34 +18,35 @@ function formatPublishedDate(dateString: string) {
 
 export default function BlogPostTemplate({ post }: BlogPostTemplateProps) {
   return (
-    <main className="bg-gray-900 text-gray-300">
-      <article className="mx-auto max-w-4xl px-5 py-16 sm:py-20">
-        <header className="border-b border-gray-800 pb-8">
+    <main className="bg-(--bg) text-(--fg-muted)">
+      <article className="mx-auto max-w-4xl px-5 py-14 sm:py-20">
+        <header className="border-b border-(--border) pb-8">
           {post.category ? (
             <Link
               href={`/${post.category.slug}`}
-              className="text-sm font-medium uppercase tracking-[0.2em] text-green-400 transition hover:text-green-300"
+              className="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent) transition hover:text-(--accent-hover)"
             >
               {post.category.title}
             </Link>
           ) : null}
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-(--fg) sm:text-5xl">
             {post.title}
           </h1>
-          <p className="mt-4 text-lg leading-8 text-gray-400">{post.excerpt}</p>
-          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500">
+          <p className="mt-4 text-lg leading-8 text-(--fg-muted)">{post.excerpt}</p>
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-(--fg-subtle)">
             <span>{formatPublishedDate(post.publishedAt)}</span>
             {post.author ? <span>By {post.author}</span> : null}
           </div>
         </header>
 
         {post.coverImage ? (
-          <div className="mt-10 overflow-hidden rounded-2xl border border-gray-800">
+          <div className="mt-10 overflow-hidden rounded-2xl border border-(--border)">
             <Image
               src={urlFor(post.coverImage).width(1400).height(780).fit("crop").url()}
               alt={post.title}
               width={1400}
               height={780}
+              priority
               className="h-auto w-full object-cover"
             />
           </div>

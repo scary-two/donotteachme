@@ -61,11 +61,11 @@ export default function BodyImageWithLightbox({
             alt={alt}
             width={width}
             height={height}
-            className="max-h-[520px] w-full rounded-lg object-contain cursor-zoom-in"
+            className="max-h-[520px] w-full rounded-lg border border-(--border) object-contain cursor-zoom-in"
           />
         </button>
         {alt ? (
-          <figcaption className="mt-3 w-full max-w-3xl px-1 text-sm text-gray-500 italic text-center">
+          <figcaption className="mt-3 w-full max-w-3xl px-1 text-sm text-(--fg-subtle) italic text-center">
             {alt}
           </figcaption>
         ) : null}
