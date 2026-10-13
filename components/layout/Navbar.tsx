@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,7 +18,6 @@ const navLinks = [
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -30,15 +29,7 @@ export default function Navbar() {
     }`;
 
   return (
-    <header
-      className="sticky top-0 z-40 border-b border-(--border) bg-(--bg)/90 backdrop-blur"
-      onKeyDown={(event) => {
-        if (event.key === "Escape" && isMobileMenuOpen) {
-          setIsMobileMenuOpen(false);
-          menuButtonRef.current?.focus();
-        }
-      }}
-    >
+    <header className="sticky top-0 z-40 border-b border-(--border) bg-(--bg)/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
         <Link href="/" className="inline-flex items-center">
           <Image
@@ -66,51 +57,40 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex items-center gap-2">
           <ThemeToggle />
           <button
             type="button"
-            ref={menuButtonRef}
-            aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            aria-controls="mobile-navigation"
+            aria-label="Toggle navigation menu"
             aria-expanded={isMobileMenuOpen}
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-(--fg) transition-colors duration-200 hover:bg-(--surface-2) hover:text-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) md:hidden"
+            className="inline-flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full text-(--fg-muted) transition-colors duration-200 hover:text-(--accent) md:hidden"
             onClick={() => setIsMobileMenuOpen((open) => !open)}
           >
-            <svg
-              aria-hidden="true"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            >
-              <path d={isMobileMenuOpen ? "M6 6l12 12M6 18L18 6" : "M4 6h16M4 12h16M4 18h16"} />
-            </svg>
+            <span className="h-0.5 w-5 rounded-full bg-current" />
+            <span className="h-0.5 w-5 rounded-full bg-current" />
+            <span className="h-0.5 w-5 rounded-full bg-current" />
           </button>
         </div>
       </div>
 
-      <nav
-        id="mobile-navigation"
-        hidden={!isMobileMenuOpen}
-        className={`${isMobileMenuOpen ? "flex" : "hidden"} flex-col gap-1 border-t border-(--border) px-5 py-3 md:hidden`}
-        aria-label="Mobile"
-      >
-        {navLinks.map((link) => (
-          <Link
-            key={link.name}
-            href={link.href}
-            className={`${linkClass(link.href)} rounded-lg px-2 py-2.5 hover:bg-(--surface-2)`}
-            aria-current={isActive(link.href) ? "page" : undefined}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {link.name}
-          </Link>
-        ))}
-      </nav>
+      {isMobileMenuOpen ? (
+        <nav
+          className="flex flex-col gap-1 border-t border-(--border) px-5 py-3 md:hidden"
+          aria-label="Mobile"
+        >
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className={`${linkClass(link.href)} rounded-lg px-2 py-2.5 hover:bg-(--surface-2)`}
+              aria-current={isActive(link.href) ? "page" : undefined}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+      ) : null}
     </header>
   );
 }

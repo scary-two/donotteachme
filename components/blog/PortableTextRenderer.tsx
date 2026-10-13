@@ -4,8 +4,10 @@ import {useEffect, useRef, useState} from "react";
 import {copyText} from "@/lib/clipboard";
 import {PortableText, type PortableTextComponents} from "@portabletext/react";
 import BodyImageWithLightbox from "@/components/blog/BodyImageWithLightbox";
+import ImageGallery from "@/components/blog/ImageGallery";
 import type {
   PortableTextCodeBlockNode,
+  PortableTextImageGalleryNode,
   PortableTextImageNode,
   PortableTextNode,
 } from "@/lib/sanity.queries";
@@ -175,6 +177,21 @@ const components: PortableTextComponents = {
       }
 
       return <BodyImageWithLightbox image={image} />;
+    },
+    imageGallery: ({value}) => {
+      const gallery = value as PortableTextImageGalleryNode;
+      const images = (gallery?.images ?? []).filter((image) => image?.asset);
+
+      if (images.length === 0) {
+        return null;
+      }
+
+      // A "gallery" with one picture is just a normal picture.
+      if (images.length === 1) {
+        return <BodyImageWithLightbox image={images[0]} />;
+      }
+
+      return <ImageGallery images={images} />;
     },
     codeBlock: ({value}) => {
       const block = value as PortableTextCodeBlockNode;

@@ -56,6 +56,12 @@ export type PortableTextImageNode = {
   };
 };
 
+export type PortableTextImageGalleryNode = {
+  _key: string;
+  _type: "imageGallery";
+  images?: PortableTextImageNode[];
+};
+
 export type PortableTextCodeBlockNode = {
   _key: string;
   _type: "codeBlock";
@@ -66,6 +72,7 @@ export type PortableTextCodeBlockNode = {
 export type PortableTextNode =
   | PortableTextBlockNode
   | PortableTextImageNode
+  | PortableTextImageGalleryNode
   | PortableTextCodeBlockNode;
 
 export type SanityPost = SanityPostListItem & {
@@ -115,6 +122,18 @@ export const singlePostQuery = groq`
           url,
           metadata {
             dimensions
+          }
+        }
+      },
+      _type == "imageGallery" => {
+        ...,
+        images[]{
+          ...,
+          asset->{
+            url,
+            metadata {
+              dimensions
+            }
           }
         }
       }
