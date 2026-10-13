@@ -11,6 +11,8 @@ The `web` folder contains the public-facing Next.js application for `donotteachm
 - Sanity Content Lake
 - Cloudflare Workers via `@opennextjs/cloudflare`
 
+`next` and `eslint-config-next` are temporarily pinned to **16.3.8**. Next.js 16.4 adds a `preview-props.json` manifest that the current OpenNext adapter omits, causing Cloudflare Error 1101 despite successful builds and deployments. Track the [upstream fix](https://github.com/opennextjs/opennextjs-cloudflare/pull/1356). Upgrade these packages together only after checking adapter compatibility and testing requests in the Cloudflare Workers runtime.
+
 ## Local development
 
 Use Node.js 24, as specified in `.nvmrc`. If you use nvm, run `nvm install` and `nvm use` from this folder.
@@ -104,6 +106,14 @@ npm run lint
 npm run build:cloudflare
 ```
 
+Test the built Worker before pushing:
+
+```bash
+npx opennextjs-cloudflare preview
+```
+
+Open the local URL printed in the terminal and check `/`, `/search?q=test`, and a real `/post/<slug>` linked from the homepage. Confirm that content loads and the preview terminal shows no exceptions, then stop it with Ctrl+C. A successful build alone does not verify that the deployed Worker can serve requests.
+
 Then review and commit the intended files, including new components:
 
 ```bash
@@ -115,7 +125,7 @@ git commit -m "Update website"
 git push origin main
 ```
 
-After pushing, open the commit on GitHub and check its **Cloudflare Workers Builds** result, or open **Cloudflare → Workers & Pages → donotteachme → Builds**. Wait for deployment to succeed before refreshing the live website. If it fails, open the build log and fix the reported error; pushing an unchanged branch will not create a new commit or fix the build.
+After pushing, open the commit on GitHub and check its **Cloudflare Workers Builds** result, or open **Cloudflare → Workers & Pages → donotteachme → Builds**. Wait for deployment to succeed, then repeat the page checks on the live website. If the build fails, check its build log; if deployment succeeds but a page errors, check the Worker's runtime logs. Pushing an unchanged branch will not create a new commit or fix the error.
 
 When changing dependencies, use `npm install <package>@<version>` and commit both `package.json` and the resulting `package-lock.json` together. Avoid replacing either file with an unrelated copy or bypassing dependency conflicts with `--force` or `--legacy-peer-deps`. `npm ci` verifies that a clean install can use the committed dependency versions; lint and the Cloudflare build validate the application.
 
