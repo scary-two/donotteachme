@@ -67,15 +67,14 @@ export default function BlogPostTemplate({ post }: BlogPostTemplateProps) {
         </header>
 
         {post.coverImage ? (
-          <div className="mt-10 overflow-hidden rounded-2xl border border-(--border)">
+          <div className="relative mt-10 aspect-[1400/780] overflow-hidden rounded-2xl border border-(--border) bg-(--surface-2)">
             <Image
-              src={urlFor(post.coverImage).width(1400).height(780).fit("crop").url()}
+              src={urlFor(post.coverImage).width(1400).fit("max").url()}
               alt={post.title}
-              width={1400}
-              height={780}
+              fill
               preload
               sizes="(min-width: 896px) 856px, calc(100vw - 40px)"
-              className="h-auto w-full object-cover"
+              className="object-contain"
             />
           </div>
         ) : null}
