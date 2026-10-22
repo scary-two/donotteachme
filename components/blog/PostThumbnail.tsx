@@ -74,11 +74,11 @@ export default function PostThumbnail({ post, className = "" }: PostThumbnailPro
     return (
       <div className={base}>
         <Image
-          src={urlFor(post.coverImage).width(640).fit("max").url()}
+          src={urlFor(post.coverImage).width(640).height(400).fit("crop").url()}
           alt=""
           fill
           sizes="(min-width: 640px) 224px, 100vw"
-          className="object-contain"
+          className="object-cover transition duration-300 group-hover:scale-105"
         />
       </div>
     );
